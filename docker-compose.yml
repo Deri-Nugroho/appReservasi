@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   # Database Server - MariaDB 11
   dbserver:

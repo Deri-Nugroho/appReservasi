@@ -33,19 +33,24 @@ sudo apt upgrade -y
 
 ```bash
 # Install dependencies
-sudo apt install -y apt-transport-https ca-certificates curl software-properties-common
+sudo apt install -y ca-certificates curl gnupg lsb-release
 
 # Add Docker's official GPG key
-curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
+sudo install -m 0755 -d /etc/apt/keyrings
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
+sudo chmod a+r /etc/apt/keyrings/docker.gpg
 
 # Add Docker repository
-echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+echo \
+  "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu \
+  $(. /etc/os-release && echo "$VERSION_CODENAME") stable" | \
+  sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
 
 # Update package index
 sudo apt update
 
 # Install Docker
-sudo apt install -y docker-ce docker-ce-cli containerd.io
+sudo apt install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
 
 # Enable dan start Docker
 sudo systemctl enable docker
@@ -68,14 +73,16 @@ sudo chmod +x /usr/local/bin/docker-compose
 docker-compose --version
 ```
 
-### 1.4 (Opsional) Tambah User ke Docker Group
+### 1.4 Tambah User ke Docker Group (Wajib)
 
-Agar tidak perlu menggunakan sudo setiap kali menjalankan docker:
+Agar dapat menjalankan docker tanpa sudo:
 
 ```bash
 sudo usermod -aG docker $USER
 newgrp docker
 ```
+
+**PENTING**: Setelah menjalankan perintah ini, logout dan login kembali SSH, atau jalankan `newgrp docker` untuk aktivasi group.
 
 ---
 
