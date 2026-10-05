@@ -85,12 +85,14 @@ newgrp docker
 # Install git jika belum ada
 sudo apt install -y git
 
-# Clone repository
+# Clone repository (file reservasi_ruangan.sql sudah ada di dalamnya)
 git clone https://github.com/Deri-Nugroho/appReservasi.git
 
 # Masuk ke direktori aplikasi
 cd appReservasi
 ```
+
+**Catatan**: File `reservasi_ruangan.sql` sudah ada di repository dan akan otomatis di-import oleh Docker Compose. Tidak perlu import manual!
 
 ---
 
@@ -156,7 +158,7 @@ docker-compose logs dbserver
 
 ### 4.1 Cek Database
 
-Database akan otomatis di-import dari file `reservasi_ruangan.sql` saat container pertama kali dijalankan.
+**Database akan otomatis di-import dari file `reservasi_ruangan.sql` saat container pertama kali dijalankan.** Tidak perlu import manual!
 
 ```bash
 # Masuk ke container database
@@ -300,6 +302,8 @@ docker-compose restart webserver
 ```
 
 ### SQL tidak ter-import otomatis
+
+**Catatan**: Seharusnya tidak perlu langkah ini karena Docker Compose sudah mengkonfigurasi auto-import. Gunakan ini hanya jika terjadi masalah.
 
 ```bash
 # Import manual ke container database
