@@ -35,7 +35,9 @@ reservasi_app/
 
 ## Cara Instalasi
 
-### 1. Siapkan Database
+### Opsi A: Instalasi Manual (XAMPP/Laragon/Local Server)
+
+#### 1. Siapkan Database
 
 Import file `reservasi_ruangan.sql` ke server MySQL/MariaDB kamu:
 
@@ -75,6 +77,36 @@ $DB_PASS = '';       // ganti sesuai password MySQL/MariaDB kamu
 
 - Letakkan folder `reservasi_app` ke dalam direktori web server (misal `htdocs` untuk XAMPP, atau `www` untuk Laragon)
 - Akses melalui browser, contoh: `http://localhost/reservasi_app/`
+
+### Opsi B: Deploy dengan Docker Compose (Production/Cloud)
+
+Untuk deployment di server cloud (AWS EC2, dll) menggunakan Docker Compose, ikuti panduan lengkap di:
+
+📖 **[DEPLOYMENT_GUIDE.md](DEPLOYMENT_GUIDE.md)**
+
+Ringkasan cepat:
+
+```bash
+# 1. Install Docker dan Docker Compose
+sudo apt update
+sudo apt install -y docker-ce docker-ce-cli containerd.io
+sudo curl -L "https://github.com/docker/compose/releases/latest/download/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+sudo chmod +x /usr/local/bin/docker-compose
+
+# 2. Clone repository
+git clone https://github.com/Deri-Nugroho/appReservasi.git
+cd appReservasi
+
+# 3. Jalankan dengan Docker Compose
+docker-compose up -d --build
+
+# 4. Akses aplikasi di http://<IP_SERVER>
+```
+
+**Komponen Docker:**
+- **Web Server**: PHP 8.2 + Apache
+- **Database**: MariaDB 11 (Jammy)
+- **Database** akan otomatis di-import dari file `reservasi_ruangan.sql`
 
 ## Alur Penggunaan
 

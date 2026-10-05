@@ -1,13 +1,14 @@
 <?php
 // =====================================================
 // Konfigurasi Koneksi Database
-// Sesuaikan host, username, password sesuai server kamu
+// Mendukung environment variables untuk Docker deployment
 // =====================================================
 
-$DB_HOST = 'localhost';
-$DB_NAME = 'db_reservasi_ruangan';
-$DB_USER = 'root';       // ganti sesuai user MySQL/MariaDB kamu
-$DB_PASS = '';           // ganti sesuai password MySQL/MariaDB kamu
+// Cek environment variables (untuk Docker) atau gunakan default values
+$DB_HOST = getenv('DB_HOST') ?: 'localhost';
+$DB_NAME = getenv('DB_NAME') ?: 'db_reservasi_ruangan';
+$DB_USER = getenv('DB_USER') ?: 'root';
+$DB_PASS = getenv('DB_PASS') ?: '';
 
 try {
     $pdo = new PDO(

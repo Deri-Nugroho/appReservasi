@@ -1,0 +1,53 @@
+version: '3.8'
+
+services:
+  # Database Server - MariaDB 11
+  dbserver:
+    image: mariadb:11-jammy
+    container_name: appreservasi_db
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: root_password
+      MYSQL_DATABASE: db_reservasi_ruangan
+      MYSQL_USER: reservasi_user
+      MYSQL_PASSWORD: reservasi_password
+    volumes:
+      - db_data:/var/lib/mysql
+      - ./reservasi_ruangan.sql:/docker-entrypoint-initdb.d/reservasi_ruangan.sql
+    networks:
+      - appreservasi_network
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-proot_password"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Web Server - PHP with Apache
+  webserver:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: appreservasi_web
+    restart: unless-stopped
+    ports:
+      - "80:80"
+    volumes:
+      - .:/var/www/html
+    depends_on:
+      dbserver:
+        condition: service_healthy
+    environment:
+      DB_HOST: dbserver
+      DB_NAME: db_reservasi_ruangan
+      DB_USER: reservasi_user
+      DB_PASS: reservasi_password
+    networks:
+      - appreservasi_network
+
+volumes:
+  db_data:
+    driver: local
+
+networks:
+  appreservasi_network:
+    driver: bridge
