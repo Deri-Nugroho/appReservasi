@@ -14,11 +14,6 @@ services:
       - ./reservasi_ruangan.sql:/docker-entrypoint-initdb.d/reservasi_ruangan.sql
     networks:
       - appreservasi_network
-    healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-proot_password"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
 
   # Web Server - PHP with Apache
   webserver:
@@ -32,8 +27,7 @@ services:
     volumes:
       - .:/var/www/html
     depends_on:
-      dbserver:
-        condition: service_healthy
+      - dbserver
     environment:
       DB_HOST: dbserver
       DB_NAME: db_reservasi_ruangan

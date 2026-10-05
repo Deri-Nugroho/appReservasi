@@ -295,17 +295,24 @@ sudo systemctl stop nginx
 sudo systemctl stop apache2
 ```
 
-### Database connection failed
+### Database connection failed atau Container unhealthy
 
 ```bash
 # Cek apakah container database sudah healthy
 docker-compose ps
 
-# Cek logs database
+# Cek logs database untuk melihat error
 docker-compose logs dbserver
 
-# Tunggu beberapa detik dan restart web server
-docker-compose restart webserver
+# Jika container unhealthy, coba restart
+docker-compose restart dbserver
+
+# Tunggu beberapa detik dan cek lagi
+docker-compose ps
+
+# Jika masih bermasalah, hapus dan recreate
+docker-compose down
+docker-compose up -d
 ```
 
 ### SQL tidak ter-import otomatis
